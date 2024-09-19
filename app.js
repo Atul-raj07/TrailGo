@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import dotenv from "dotenv"
 dotenv.config()
 
@@ -10,6 +10,10 @@ import authRouter from "./routes/authRouter.js";
 
 
 const app = express();
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
