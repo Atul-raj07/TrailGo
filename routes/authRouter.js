@@ -2,16 +2,34 @@ import express from 'express';
 const Router = express.Router();
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { check, validationResult } from 'express-validator';
 import { configDotenv } from 'dotenv';
+import { body, validationResult } from 'express-validator';
 
 import userModel from '../models/userModel.js';
 
 Router.get('/', (req, res) => {
   res.status(200).json('this is the auth page');
 });
-Router.post('/', (req, res) => {
+Router.post('/',
+  [
+    body('username')
+      .isString()
+      .isLength({ min: 2, max: 100 })
+      .withMessage('Username must be between 2 and 100 characters.'),
+    body('email')
+      .isEmail()
+      .withMessage('A valid email is required.'),
+    body('password')
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters long.'),
+  ]
+  , (req, res) => {
+    const errors = validationResult(req);
+    
   try {
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     const { username, password, email } = req.body;
     bcrypt.genSalt(15, (err, salt) => {
       bcrypt.hash(password, salt, async (err, hash) => {
