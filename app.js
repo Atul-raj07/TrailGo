@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 
 import db from "./config/db.js";
 import indexRouter from "./routes/indexRouter.js";
-import authRouter from "./routes/authRouter.js";
+import userauthRouter from "./routes/user-authRouter.js";
+import adminauthRouter from "./routes/admin-authRouter.js"
 
 
 const app = express();
@@ -18,7 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 app.use('/', indexRouter)
-app.use('/auth', authRouter)
+app.use('/userauth', userauthRouter)
+app.use('/adminauth', adminauthRouter)
 
 let port = process.env.PORT || 3000
 
