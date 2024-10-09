@@ -68,7 +68,16 @@ Router.post("/login",async (req,res)=>{
     
 })
 
-Router.post("/logout",(req,res)=>{
+const authenticate = (req, res) =>{
+    console.log("hatja behanki");
+    
+}
+
+Router.post("/logout",authenticate,(req,res)=>{
+    console.log(authenticate)
+    if(!token){
+        return res.send("token not found")
+    }
 res.clearCookie("token")
 res.send("logout")
 })
